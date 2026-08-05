@@ -1,0 +1,2838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b5cad">
+  <title>Mi EPS | Servicios al afiliado</title>
+
+  <style>
+    :root {
+      --azul: #0b5cad;
+      --azul-oscuro: #063b70;
+      --azul-claro: #eaf4ff;
+      --verde: #20b486;
+      --verde-claro: #e7f8f2;
+      --morado: #7857d6;
+      --naranja: #f39a3f;
+      --rojo: #dc5b67;
+      --texto: #163047;
+      --texto-suave: #6c8092;
+      --borde: #dfe9f1;
+      --fondo: #f4f8fc;
+      --blanco: #ffffff;
+      --sombra: 0 18px 45px rgba(26, 68, 104, 0.12);
+      --sombra-suave: 0 8px 24px rgba(26, 68, 104, 0.08);
+      --radio: 22px;
+      --tamano-fuente: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: var(--tamano-fuente);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+
+    body.contraste-alto {
+      --azul: #003f88;
+      --azul-oscuro: #001d3d;
+      --azul-claro: #dceeff;
+      --verde: #007f5f;
+      --verde-claro: #d8f3dc;
+      --texto: #000000;
+      --texto-suave: #1d1d1d;
+      --borde: #000000;
+      --fondo: #ffffff;
+      --blanco: #ffffff;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+    }
+
+    /* BARRA LATERAL */
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 270px;
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 5%, rgba(255,255,255,.14), transparent 26%),
+        linear-gradient(180deg, var(--azul-oscuro), #052b50);
+      z-index: 50;
+      overflow-y: auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 2px 8px 28px;
+    }
+
+    .logo-icono {
+      width: 47px;
+      height: 47px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(145deg, #34d4a1, #16a978);
+      box-shadow: 0 12px 28px rgba(27, 205, 151, .28);
+    }
+
+    .logo strong {
+      display: block;
+      font-size: 21px;
+    }
+
+    .logo small {
+      color: rgba(255,255,255,.68);
+    }
+
+    .menu-lateral {
+      display: grid;
+      gap: 6px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      min-height: 49px;
+      padding: 11px 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 14px;
+      color: rgba(255,255,255,.73);
+      background: transparent;
+      text-align: left;
+      transition: .2s ease;
+    }
+
+    .menu-btn:hover,
+    .menu-btn.activo {
+      color: white;
+      background: rgba(255,255,255,.13);
+      transform: translateX(2px);
+    }
+
+    .menu-btn.activo {
+      box-shadow: inset 3px 0 0 #39d1a1;
+    }
+
+    .menu-icono {
+      width: 31px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .menu-btn span:last-child {
+      font-weight: 650;
+    }
+
+    .tarjeta-ayuda-lateral {
+      margin-top: auto;
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 20px;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .tarjeta-ayuda-lateral strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .tarjeta-ayuda-lateral p {
+      margin-bottom: 12px;
+      color: rgba(255,255,255,.67);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+
+    .tarjeta-ayuda-lateral button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 11px;
+      color: var(--azul-oscuro);
+      background: white;
+      font-weight: 750;
+    }
+
+    /* ÁREA PRINCIPAL */
+    .principal {
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .barra-superior {
+      position: sticky;
+      top: 0;
+      z-index: 35;
+      height: 78px;
+      padding: 0 34px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid rgba(215, 226, 235, .9);
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(16px);
+    }
+
+    .btn-menu-movil {
+      display: none;
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: var(--azul-claro);
+      color: var(--azul);
+      font-size: 21px;
+    }
+
+    .titulo-barra {
+      flex: 1;
+      color: var(--texto-suave);
+      font-weight: 650;
+    }
+
+    .acciones-barra {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icono {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--borde);
+      border-radius: 13px;
+      color: var(--texto-suave);
+      background: white;
+      transition: .2s ease;
+    }
+
+    .btn-icono:hover {
+      color: var(--azul);
+      transform: translateY(-2px);
+      box-shadow: var(--sombra-suave);
+    }
+
+    .perfil-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 9px 5px 5px;
+      border: 1px solid var(--borde);
+      border-radius: 15px;
+      background: white;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      background: linear-gradient(145deg, var(--azul), #3a91da);
+      font-size: .75rem;
+      font-weight: 800;
+    }
+
+    .perfil-mini strong,
+    .perfil-mini small {
+      display: block;
+    }
+
+    .perfil-mini strong {
+      font-size: .83rem;
+    }
+
+    .perfil-mini small {
+      color: var(--texto-suave);
+      font-size: .65rem;
+    }
+
+    .contenido {
+      width: min(100%, 1500px);
+      margin: 0 auto;
+      padding: 30px 34px 85px;
+    }
+
+    .pagina {
+      display: none;
+      animation: aparecer .35s ease;
+    }
+
+    .pagina.activa {
+      display: block;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BOTONES GENERALES */
+    .btn-primario,
+    .btn-secundario,
+    .btn-claro,
+    .btn-texto {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 13px;
+      font-weight: 750;
+      transition: .2s ease;
+    }
+
+    .btn-primario {
+      min-height: 45px;
+      padding: 0 18px;
+      color: white;
+      background: var(--azul);
+      box-shadow: 0 10px 23px rgba(11, 92, 173, .22);
+    }
+
+    .btn-primario:hover,
+    .btn-secundario:hover,
+    .btn-claro:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-secundario {
+      min-height: 43px;
+      padding: 0 16px;
+      color: var(--azul);
+      border: 1px solid #bcd6eb;
+      background: white;
+    }
+
+    .btn-claro {
+      min-height: 45px;
+      padding: 0 18px;
+      color: var(--azul-oscuro);
+      background: white;
+    }
+
+    .btn-texto {
+      color: var(--azul);
+      background: transparent;
+    }
+
+    .ancho-completo {
+      width: 100%;
+    }
+
+    /* INICIO */
+    .hero {
+      position: relative;
+      min-height: 255px;
+      padding: 40px 42px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 30px;
+      color: white;
+      background:
+        radial-gradient(circle at 84% 24%, rgba(255,255,255,.22), transparent 22%),
+        linear-gradient(118deg, var(--azul-oscuro), var(--azul) 58%, #398ed0);
+      box-shadow: 0 22px 55px rgba(8, 70, 126, .23);
+    }
+
+    .hero::after {
+      content: "+";
+      position: absolute;
+      right: 90px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 135px;
+      height: 135px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255,255,255,.35);
+      border-radius: 38px;
+      background: rgba(255,255,255,.12);
+      font-size: 88px;
+      font-weight: 250;
+      box-shadow: 0 17px 35px rgba(0,0,0,.12);
+    }
+
+    .hero-contenido {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+    }
+
+    .etiqueta {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--azul);
+      font-size: .7rem;
+      font-weight: 850;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .hero .etiqueta {
+      color: #bfe6ff;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.15;
+      letter-spacing: -.035em;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+    }
+
+    .hero p {
+      max-width: 535px;
+      margin-bottom: 24px;
+      color: rgba(255,255,255,.8);
+      line-height: 1.65;
+    }
+
+    .hero-botones {
+      display: flex;
+      gap: 11px;
+      flex-wrap: wrap;
+    }
+
+    .seccion-titulo {
+      margin: 30px 0 15px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .seccion-titulo p,
+    .cabecera-pagina p {
+      margin-top: 6px;
+      color: var(--texto-suave);
+      line-height: 1.5;
+    }
+
+    .grid-servicios {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .servicio {
+      position: relative;
+      min-height: 165px;
+      padding: 19px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      overflow: hidden;
+      border: 1px solid var(--borde);
+      border-radius: 21px;
+      background: white;
+      box-shadow: var(--sombra-suave);
+      transition: .23s ease;
+    }
+
+    .servicio:hover {
+      transform: translateY(-5px);
+      border-color: #bad5e9;
+      box-shadow: var(--sombra);
+    }
+
+    .servicio::after {
+      content: "→";
+      position: absolute;
+      right: 17px;
+      bottom: 16px;
+      color: #9aabba;
+      font-size: 20px;
+    }
+
+    .servicio-icono {
+      width: 53px;
+      height: 53px;
+      margin-bottom: 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      font-size: 25px;
+    }
+
+    .servicio.azul .servicio-icono { color: var(--azul); background: var(--azul-claro); }
+    .servicio.verde .servicio-icono { color: var(--verde); background: var(--verde-claro); }
+    .servicio.morado .servicio-icono { color: var(--morado); background: #f0ecff; }
+    .servicio.naranja .servicio-icono { color: var(--naranja); background: #fff2e5; }
+    .servicio.rojo .servicio-icono { color: var(--rojo); background: #fff0f2; }
+
+    .servicio strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: .96rem;
+    }
+
+    .servicio small {
+      color: var(--texto-suave);
+      line-height: 1.4;
+    }
+
+    .grid-inicio-inferior {
+      margin-top: 25px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(310px, .6fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .tarjeta {
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      background: white;
+      box-shadow: var(--sombra-suave);
+    }
+
+    .tarjeta-padding {
+      padding: 21px;
+    }
+
+    .lista-recordatorios {
+      display: grid;
+      gap: 12px;
+    }
+
+    .recordatorio {
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      background: white;
+    }
+
+    .recordatorio-icono {
+      width: 54px;
+      height: 54px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: var(--azul);
+      background: var(--azul-claro);
+      font-size: 23px;
+    }
+
+    .recordatorio-icono.verde {
+      color: var(--verde);
+      background: var(--verde-claro);
+    }
+
+    .recordatorio-contenido {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .recordatorio-contenido small {
+      color: var(--texto-suave);
+    }
+
+    .recordatorio-contenido h3 {
+      margin: 5px 0;
+    }
+
+    .estado {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--azul-oscuro);
+      background: var(--azul-claro);
+      font-size: .66rem;
+      font-weight: 800;
+    }
+
+    .estado.verde {
+      color: #087252;
+      background: var(--verde-claro);
+    }
+
+    .estado.amarillo {
+      color: #966012;
+      background: #fff4dc;
+    }
+
+    .proxima-cita {
+      padding: 22px;
+      background: linear-gradient(180deg, #ffffff, #f7fbff);
+    }
+
+    .proxima-cita .fecha-grande {
+      margin: 17px 0;
+      padding: 17px;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 7px;
+      border-radius: 18px;
+      color: var(--azul-oscuro);
+      background: var(--azul-claro);
+    }
+
+    .fecha-grande strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .fecha-grande span {
+      font-weight: 800;
+    }
+
+    .dato-cita {
+      padding: 11px 0;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid var(--borde);
+      color: var(--texto-suave);
+      font-size: .83rem;
+    }
+
+    .dato-cita b {
+      color: var(--texto);
+    }
+
+    /* PÁGINAS */
+    .cabecera-pagina {
+      margin-bottom: 23px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .dos-columnas {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(320px, .65fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .lista-vertical {
+      display: grid;
+      gap: 13px;
+    }
+
+    .cita-card,
+    .tramite-card,
+    .medicamento-card,
+    .centro-card {
+      padding: 18px;
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      background: white;
+      box-shadow: var(--sombra-suave);
+    }
+
+    .cita-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .fecha-cita {
+      width: 66px;
+      height: 75px;
+      flex: none;
+      display: grid;
+      place-content: center;
+      border-radius: 16px;
+      color: var(--azul);
+      background: var(--azul-claro);
+      text-align: center;
+    }
+
+    .fecha-cita strong {
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .fecha-cita span {
+      margin-top: 4px;
+      font-size: .64rem;
+      font-weight: 850;
+    }
+
+    .cita-info,
+    .tramite-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cita-info p,
+    .tramite-info p,
+    .medicamento-card p,
+    .centro-card p {
+      margin-top: 6px;
+      color: var(--texto-suave);
+      line-height: 1.5;
+      font-size: .82rem;
+    }
+
+    .cita-meta {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 17px;
+      color: var(--texto-suave);
+      font-size: .74rem;
+    }
+
+    .formulario-card {
+      position: sticky;
+      top: 100px;
+      padding: 22px;
+    }
+
+    .formulario-card h3 {
+      margin-bottom: 17px;
+    }
+
+    .campo {
+      margin-bottom: 14px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .campo label {
+      color: var(--texto-suave);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--borde);
+      border-radius: 11px;
+      outline: none;
+      color: var(--texto);
+      background: #fbfdff;
+      transition: .2s ease;
+    }
+
+    .campo textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      border-color: #79b4e1;
+      box-shadow: 0 0 0 4px var(--azul-claro);
+    }
+
+    .fila-campos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .estadisticas {
+      margin-bottom: 19px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .estadistica {
+      padding: 17px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      background: white;
+      box-shadow: var(--sombra-suave);
+    }
+
+    .estadistica-icono {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--azul);
+      background: var(--azul-claro);
+      font-size: 22px;
+    }
+
+    .estadistica-icono.verde {
+      color: var(--verde);
+      background: var(--verde-claro);
+    }
+
+    .estadistica-icono.naranja {
+      color: var(--naranja);
+      background: #fff2e6;
+    }
+
+    .estadistica strong,
+    .estadistica span {
+      display: block;
+    }
+
+    .estadistica strong {
+      font-size: 1.45rem;
+    }
+
+    .estadistica span {
+      color: var(--texto-suave);
+      font-size: .72rem;
+    }
+
+    .tramite-card-top,
+    .medicamento-top,
+    .centro-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .barra-progreso {
+      width: 100%;
+      height: 9px;
+      margin: 13px 0 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7edf2;
+    }
+
+    .barra-progreso span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--verde), #52cbaa);
+    }
+
+    .pasos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      color: var(--texto-suave);
+      font-size: .67rem;
+      text-align: center;
+    }
+
+    .paso {
+      padding-top: 9px;
+      border-top: 3px solid #dce4ea;
+    }
+
+    .paso.hecho {
+      color: #087252;
+      border-color: var(--verde);
+      font-weight: 800;
+    }
+
+    .grid-medicamentos,
+    .grid-centros {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .medicamento-icono,
+    .centro-icono {
+      width: 49px;
+      height: 49px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: var(--azul);
+      background: var(--azul-claro);
+      font-size: 23px;
+    }
+
+    .medicamento-datos {
+      margin: 17px 0;
+      display: grid;
+      gap: 9px;
+    }
+
+    .medicamento-dato {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--borde);
+      color: var(--texto-suave);
+      font-size: .78rem;
+    }
+
+    .medicamento-dato b {
+      color: var(--texto);
+    }
+
+    .centro-card {
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .centro-imagen {
+      height: 130px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background:
+        linear-gradient(rgba(5, 57, 104, .35), rgba(5, 57, 104, .45)),
+        radial-gradient(circle at 20% 30%, #67c7e8, transparent 30%),
+        linear-gradient(135deg, #0b5cad, #26b28a);
+      font-size: 48px;
+    }
+
+    .centro-cuerpo {
+      padding: 18px;
+    }
+
+    .centro-cuerpo .cita-meta {
+      margin-bottom: 14px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .perfil-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, .75fr) minmax(0, 1.25fr);
+      gap: 20px;
+    }
+
+    .perfil-principal {
+      padding: 25px;
+      text-align: center;
+    }
+
+    .avatar-grande {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 15px;
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      color: white;
+      background: linear-gradient(145deg, var(--azul), #45a3e5);
+      font-size: 1.5rem;
+      font-weight: 900;
+      box-shadow: 0 16px 30px rgba(11, 92, 173, .22);
+    }
+
+    .perfil-principal p {
+      margin-top: 7px;
+      color: var(--texto-suave);
+    }
+
+    .datos-perfil {
+      margin-top: 20px;
+      display: grid;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .dato-perfil {
+      padding: 13px;
+      border-radius: 13px;
+      background: var(--fondo);
+    }
+
+    .dato-perfil small,
+    .dato-perfil strong {
+      display: block;
+    }
+
+    .dato-perfil small {
+      margin-bottom: 4px;
+      color: var(--texto-suave);
+    }
+
+    /* ACCESIBILIDAD */
+    .panel-accesibilidad {
+      position: fixed;
+      top: 86px;
+      right: 20px;
+      z-index: 90;
+      width: min(340px, calc(100vw - 32px));
+      padding: 20px;
+      display: none;
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      background: white;
+      box-shadow: var(--sombra);
+    }
+
+    .panel-accesibilidad.abierto {
+      display: block;
+      animation: aparecer .25s ease;
+    }
+
+    .panel-accesibilidad h3 {
+      margin-bottom: 15px;
+    }
+
+    .opcion-accesibilidad {
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--borde);
+    }
+
+    .controles-fuente {
+      display: flex;
+      gap: 6px;
+    }
+
+    .controles-fuente button {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      color: var(--azul);
+      background: var(--azul-claro);
+      font-weight: 800;
+    }
+
+    .switch {
+      position: relative;
+      width: 48px;
+      height: 27px;
+      flex: none;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .switch span {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: #cad5dd;
+      transition: .2s ease;
+    }
+
+    .switch span::after {
+      content: "";
+      position: absolute;
+      width: 21px;
+      height: 21px;
+      top: 3px;
+      left: 3px;
+      border-radius: 50%;
+      background: white;
+      transition: .2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    }
+
+    .switch input:checked + span {
+      background: var(--verde);
+    }
+
+    .switch input:checked + span::after {
+      transform: translateX(21px);
+    }
+
+    /* CHAT */
+    .chat-flotante {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 85;
+    }
+
+    .chat-boton {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 21px;
+      color: white;
+      background: linear-gradient(145deg, var(--verde), #15956c);
+      box-shadow: 0 16px 33px rgba(20, 159, 115, .32);
+      font-size: 26px;
+    }
+
+    .chat-ventana {
+      position: absolute;
+      right: 0;
+      bottom: 75px;
+      width: min(360px, calc(100vw - 32px));
+      display: none;
+      overflow: hidden;
+      border: 1px solid var(--borde);
+      border-radius: 22px;
+      background: white;
+      box-shadow: var(--sombra);
+    }
+
+    .chat-ventana.abierta {
+      display: block;
+      animation: aparecer .25s ease;
+    }
+
+    .chat-cabecera {
+      padding: 17px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: white;
+      background: linear-gradient(120deg, var(--azul-oscuro), var(--azul));
+    }
+
+    .chat-cabecera .avatar {
+      background: var(--verde);
+    }
+
+    .chat-cabecera div:nth-child(2) {
+      flex: 1;
+    }
+
+    .chat-cabecera small {
+      color: rgba(255,255,255,.72);
+    }
+
+    .cerrar-chat {
+      width: 33px;
+      height: 33px;
+      border-radius: 10px;
+      color: white;
+      background: rgba(255,255,255,.13);
+    }
+
+    .chat-mensajes {
+      height: 280px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      background: #f7fafc;
+    }
+
+    .mensaje {
+      max-width: 83%;
+      padding: 11px 13px;
+      border-radius: 15px;
+      line-height: 1.45;
+      font-size: .82rem;
+    }
+
+    .mensaje.asesor {
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      background: white;
+      box-shadow: var(--sombra-suave);
+    }
+
+    .mensaje.usuario {
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+      color: white;
+      background: var(--azul);
+    }
+
+    .chat-escritura {
+      padding: 11px;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--borde);
+    }
+
+    .chat-escritura input {
+      min-width: 0;
+      flex: 1;
+      padding: 11px 12px;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .chat-escritura button {
+      width: 44px;
+      border-radius: 12px;
+      color: white;
+      background: var(--azul);
+    }
+
+    /* MODALES */
+    .modal-fondo {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      padding: 20px;
+      display: none;
+      place-items: center;
+      background: rgba(4, 29, 52, .58);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-fondo.abierto {
+      display: grid;
+    }
+
+    .modal {
+      width: min(520px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 25px;
+      border-radius: 24px;
+      background: white;
+      box-shadow: 0 25px 70px rgba(0,0,0,.24);
+      animation: aparecer .25s ease;
+    }
+
+    .modal-cabecera {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .modal-cerrar {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      color: var(--texto-suave);
+      background: var(--fondo);
+    }
+
+    .estrellas {
+      margin: 18px 0;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .estrella {
+      color: #cbd5dd;
+      background: transparent;
+      font-size: 34px;
+    }
+
+    .estrella.seleccionada {
+      color: #f5b73d;
+    }
+
+    /* NOTIFICACIÓN */
+    .notificacion {
+      position: fixed;
+      top: 92px;
+      right: 24px;
+      z-index: 120;
+      max-width: 380px;
+      padding: 15px 17px;
+      display: none;
+      align-items: center;
+      gap: 11px;
+      border: 1px solid #bfe6d8;
+      border-radius: 16px;
+      color: #086e50;
+      background: #edfbf5;
+      box-shadow: var(--sombra);
+    }
+
+    .notificacion.mostrar {
+      display: flex;
+      animation: aparecer .25s ease;
+    }
+
+    /* NAVEGACIÓN MÓVIL */
+    .nav-movil {
+      display: none;
+    }
+
+    .overlay-sidebar {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      display: none;
+      background: rgba(3, 28, 51, .5);
+    }
+
+    .overlay-sidebar.visible {
+      display: block;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1200px) {
+      .grid-servicios {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-medicamentos,
+      .grid-centros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        transform: translateX(-105%);
+        transition: .25s ease;
+      }
+
+      .sidebar.abierta {
+        transform: translateX(0);
+      }
+
+      .principal {
+        grid-column: 1;
+      }
+
+      .btn-menu-movil {
+        display: grid;
+        place-items: center;
+      }
+
+      .grid-inicio-inferior,
+      .dos-columnas,
+      .perfil-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .formulario-card {
+        position: static;
+      }
+
+      .hero::after {
+        right: 40px;
+        opacity: .42;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .barra-superior {
+        height: 67px;
+        padding: 0 14px;
+      }
+
+      .titulo-barra,
+      .perfil-mini > div:not(.avatar) {
+        display: none;
+      }
+
+      .perfil-mini {
+        padding: 4px;
+      }
+
+      .contenido {
+        padding: 18px 14px 105px;
+      }
+
+      .hero {
+        min-height: 300px;
+        padding: 28px 23px;
+        align-items: flex-start;
+      }
+
+      .hero::after {
+        right: -25px;
+        top: auto;
+        bottom: -35px;
+        transform: none;
+      }
+
+      .hero p {
+        font-size: .9rem;
+      }
+
+      .grid-servicios,
+      .grid-medicamentos,
+      .grid-centros,
+      .estadisticas {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .servicio {
+        min-height: 155px;
+      }
+
+      .cabecera-pagina,
+      .seccion-titulo {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .cita-card {
+        align-items: flex-start;
+      }
+
+      .fila-campos {
+        grid-template-columns: 1fr;
+      }
+
+      .pasos {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .chat-flotante {
+        bottom: 87px;
+        right: 16px;
+      }
+
+      .chat-boton {
+        width: 55px;
+        height: 55px;
+        border-radius: 18px;
+      }
+
+      .nav-movil {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        z-index: 70;
+        padding: 8px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 1px solid rgba(216, 228, 237, .9);
+        border-radius: 20px;
+        background: rgba(255,255,255,.94);
+        box-shadow: 0 15px 38px rgba(17, 54, 83, .17);
+        backdrop-filter: blur(16px);
+      }
+
+      .nav-movil button {
+        padding: 7px 4px;
+        display: grid;
+        justify-items: center;
+        gap: 3px;
+        border-radius: 13px;
+        color: var(--texto-suave);
+        background: transparent;
+        font-size: 18px;
+      }
+
+      .nav-movil button span {
+        font-size: .58rem;
+        font-weight: 750;
+      }
+
+      .nav-movil button.activo {
+        color: var(--azul);
+        background: var(--azul-claro);
+      }
+
+      .notificacion {
+        left: 14px;
+        right: 14px;
+        top: 76px;
+      }
+    }
+
+    @media (max-width: 470px) {
+      .grid-servicios,
+      .grid-medicamentos,
+      .grid-centros,
+      .estadisticas {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-botones {
+        flex-direction: column;
+      }
+
+      .hero-botones button {
+        width: 100%;
+      }
+
+      .recordatorio,
+      .cita-card {
+        flex-wrap: wrap;
+      }
+
+      .cita-card .btn-secundario {
+        width: 100%;
+      }
+    }
+
+
+    /* FUNCIONES INTERACTIVAS ADICIONALES */
+    .btn-notificaciones { position: relative; }
+    .contador-notificaciones {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      display: grid;
+      place-items: center;
+      border: 2px solid white;
+      border-radius: 999px;
+      color: white;
+      background: var(--rojo);
+      font-size: .58rem;
+      font-weight: 900;
+    }
+    .modal-contenido-detalle {
+      display: grid;
+      gap: 12px;
+      color: var(--texto-suave);
+      line-height: 1.55;
+    }
+    .detalle-fila {
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+      border: 1px solid var(--borde);
+      border-radius: 13px;
+      background: var(--fondo);
+    }
+    .detalle-fila b { color: var(--texto); text-align: right; }
+    .modal-acciones {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-peligro {
+      min-height: 43px;
+      padding: 0 16px;
+      border-radius: 13px;
+      color: white;
+      background: var(--rojo);
+      font-weight: 750;
+    }
+    .notificacion-item {
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 11px;
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      background: var(--fondo);
+    }
+    .notificacion-item + .notificacion-item { margin-top: 10px; }
+    .notificacion-item strong, .notificacion-item small { display: block; }
+    .notificacion-item small { margin-top: 4px; color: var(--texto-suave); }
+    .botones-card { display: flex; gap: 8px; flex-wrap: wrap; }
+    .completado { opacity: .7; }
+    .completado h3 { text-decoration: line-through; }
+    .estado.cancelada { color: #9a2733; background: #ffe8eb; }
+    .sin-resultados {
+      grid-column: 1 / -1;
+      padding: 26px;
+      border: 1px dashed var(--borde);
+      border-radius: 18px;
+      color: var(--texto-suave);
+      text-align: center;
+      background: white;
+    }
+    @media (max-width: 520px) {
+      .modal-acciones > button { width: 100%; }
+      .detalle-fila { flex-direction: column; }
+      .detalle-fila b { text-align: left; }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="overlay-sidebar" id="overlaySidebar"></div>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="logo-icono">+</div>
+        <div>
+          <strong>Mi EPS</strong>
+          <small>Tu salud, más cerca</small>
+        </div>
+      </div>
+
+      <nav class="menu-lateral">
+        <button class="menu-btn activo" data-pagina="inicio">
+          <span class="menu-icono">🏠</span><span>Inicio</span>
+        </button>
+        <button class="menu-btn" data-pagina="citas">
+          <span class="menu-icono">📅</span><span>Citas médicas</span>
+        </button>
+        <button class="menu-btn" data-pagina="autorizaciones">
+          <span class="menu-icono">📄</span><span>Autorizaciones</span>
+        </button>
+        <button class="menu-btn" data-pagina="medicamentos">
+          <span class="menu-icono">💊</span><span>Medicamentos</span>
+        </button>
+        <button class="menu-btn" data-pagina="centros">
+          <span class="menu-icono">🏥</span><span>Centros médicos</span>
+        </button>
+        <button class="menu-btn" data-pagina="tramites">
+          <span class="menu-icono">📋</span><span>Mis trámites</span>
+        </button>
+        <button class="menu-btn" data-pagina="perfil">
+          <span class="menu-icono">👤</span><span>Mi perfil</span>
+        </button>
+      </nav>
+
+      <div class="tarjeta-ayuda-lateral">
+        <strong>¿Necesitas ayuda?</strong>
+        <p>Habla con nuestro asistente y resuelve tus dudas rápidamente.</p>
+        <button onclick="abrirChat()">Chatear con un asesor</button>
+      </div>
+    </aside>
+
+    <main class="principal">
+      <header class="barra-superior">
+        <button class="btn-menu-movil" id="btnMenuMovil" aria-label="Abrir menú">☰</button>
+        <div class="titulo-barra" id="tituloBarra">Portal de servicios al afiliado</div>
+
+        <div class="acciones-barra">
+          <button class="btn-icono" id="btnLeer" title="Leer pantalla" aria-label="Leer pantalla">🔊</button>
+          <button class="btn-icono" id="btnAccesibilidad" title="Accesibilidad" aria-label="Accesibilidad">♿</button>
+          <button class="btn-icono btn-notificaciones" id="btnNotificaciones" title="Notificaciones" aria-label="Ver notificaciones">🔔<span class="contador-notificaciones" id="contadorNotificaciones">3</span></button>
+          <button class="perfil-mini" data-pagina="perfil">
+            <div class="avatar" id="avatarMini">O</div>
+            <div>
+              <strong id="nombreMini">Olivia</strong>
+              <small>Afiliada activa</small>
+            </div>
+          </button>
+        </div>
+      </header>
+
+      <div class="contenido">
+        <!-- INICIO -->
+        <section class="pagina activa" id="pagina-inicio">
+          <div class="hero">
+            <div class="hero-contenido">
+              <span class="etiqueta">Bienvenido a tu portal de salud</span>
+              <h1>Hola, <span id="nombreHero">Olivia</span> 👋<br>¿Qué necesitas hoy?</h1>
+              <p>Gestiona tus citas, autorizaciones, medicamentos y trámites de forma sencilla, rápida y segura.</p>
+              <div class="hero-botones">
+                <button class="btn-claro" data-pagina="citas">📅 Solicitar cita</button>
+                <button class="btn-secundario" style="color:white;border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.10)" data-pagina="tramites">Consultar trámite</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="seccion-titulo">
+            <div>
+              <span class="etiqueta">Accesos rápidos</span>
+              <h2>Servicios principales</h2>
+              <p>Todo lo que necesitas, organizado en un solo lugar.</p>
+            </div>
+          </div>
+
+          <div class="grid-servicios">
+            <button class="servicio azul" data-pagina="citas">
+              <span class="servicio-icono">📅</span>
+              <strong>Solicitar cita</strong>
+              <small>Agenda medicina general o especialidades.</small>
+            </button>
+
+            <button class="servicio morado" data-pagina="autorizaciones">
+              <span class="servicio-icono">📄</span>
+              <strong>Autorizaciones</strong>
+              <small>Consulta y solicita servicios médicos.</small>
+            </button>
+
+            <button class="servicio verde" data-pagina="medicamentos">
+              <span class="servicio-icono">💊</span>
+              <strong>Medicamentos</strong>
+              <small>Revisa fórmulas y recordatorios.</small>
+            </button>
+
+            <button class="servicio naranja" data-pagina="centros">
+              <span class="servicio-icono">🏥</span>
+              <strong>Centros médicos</strong>
+              <small>Encuentra sedes cercanas y horarios.</small>
+            </button>
+
+            <button class="servicio rojo" data-pagina="tramites">
+              <span class="servicio-icono">📋</span>
+              <strong>Mis trámites</strong>
+              <small>Haz seguimiento en tiempo real.</small>
+            </button>
+          </div>
+
+          <div class="grid-inicio-inferior">
+            <div>
+              <div class="seccion-titulo" style="margin-top:0">
+                <div>
+                  <span class="etiqueta">Para hoy</span>
+                  <h2>Recordatorios importantes</h2>
+                </div>
+              </div>
+
+              <div class="lista-recordatorios">
+                <article class="recordatorio">
+                  <div class="recordatorio-icono">🩺</div>
+                  <div class="recordatorio-contenido">
+                    <span class="estado">Mañana · 9:30 a. m.</span>
+                    <h3>Consulta de medicina general</h3>
+                    <small>Centro Médico Norte · Consultorio 204</small>
+                  </div>
+                  <button class="btn-secundario" data-pagina="citas">Ver cita</button>
+                </article>
+
+                <article class="recordatorio">
+                  <div class="recordatorio-icono verde">💊</div>
+                  <div class="recordatorio-contenido">
+                    <span class="estado verde">Hoy · 8:00 p. m.</span>
+                    <h3>Tomar Losartán 50 mg</h3>
+                    <small>1 tableta después de la comida</small>
+                  </div>
+                  <button class="btn-secundario" id="btnMarcarMedicamento">Marcar</button>
+                </article>
+
+                <article class="recordatorio">
+                  <div class="recordatorio-icono" style="color:var(--morado);background:#f0ecff">📄</div>
+                  <div class="recordatorio-contenido">
+                    <span class="estado amarillo">En revisión</span>
+                    <h3>Autorización para ecografía</h3>
+                    <small>Solicitud radicada No. AUT-2026-01834</small>
+                  </div>
+                  <button class="btn-secundario" data-pagina="autorizaciones">Seguir</button>
+                </article>
+              </div>
+            </div>
+
+            <aside class="tarjeta proxima-cita">
+              <div>
+                <span class="etiqueta">Próxima atención</span>
+                <h3>Tu próxima cita</h3>
+              </div>
+
+              <div class="fecha-grande">
+                <strong>28</strong>
+                <span>JUL<br>2026</span>
+              </div>
+
+              <h3 style="margin-bottom:13px">Medicina general</h3>
+              <div class="dato-cita">🕘 <span><b>9:30 a. m.</b><br>Duración estimada: 20 minutos</span></div>
+              <div class="dato-cita">🏥 <span><b>Centro Médico Norte</b><br>Calle 72 # 43-25</span></div>
+              <div class="dato-cita">👩‍⚕️ <span><b>Dra. Laura Martínez</b><br>Medicina general</span></div>
+
+              <button class="btn-primario ancho-completo" style="margin-top:15px" id="btnAgregarRecordatorio">Agregar recordatorio</button>
+            </aside>
+          </div>
+        </section>
+
+        <!-- CITAS -->
+        <section class="pagina" id="pagina-citas">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Agenda médica</span>
+              <h1>Mis citas</h1>
+              <p>Consulta tus próximas atenciones y solicita una nueva cita.</p>
+            </div>
+            <button class="btn-primario" onclick="document.getElementById('especialidad').focus()">＋ Nueva cita</button>
+          </div>
+
+          <div class="dos-columnas">
+            <div class="lista-vertical" id="listaCitas">
+              <article class="cita-card">
+                <div class="fecha-cita"><strong>28</strong><span>JUL · 2026</span></div>
+                <div class="cita-info">
+                  <span class="estado verde">Confirmada</span>
+                  <h3 style="margin-top:8px">Medicina general</h3>
+                  <p>Dra. Laura Martínez</p>
+                  <div class="cita-meta"><span>🕘 9:30 a. m.</span><span>🏥 Centro Médico Norte</span></div>
+                </div>
+                <button class="btn-secundario" type="button">Detalles</button>
+              </article>
+
+              <article class="cita-card">
+                <div class="fecha-cita" style="color:var(--verde);background:var(--verde-claro)"><strong>04</strong><span>AGO · 2026</span></div>
+                <div class="cita-info">
+                  <span class="estado verde">Confirmada</span>
+                  <h3 style="margin-top:8px">Odontología</h3>
+                  <p>Dr. Carlos Medina</p>
+                  <div class="cita-meta"><span>🕘 3:00 p. m.</span><span>🏥 Sede Centro</span></div>
+                </div>
+                <button class="btn-secundario" type="button">Detalles</button>
+              </article>
+
+              <article class="cita-card">
+                <div class="fecha-cita" style="color:var(--texto-suave);background:#eef2f5"><strong>12</strong><span>JUN · 2026</span></div>
+                <div class="cita-info">
+                  <span class="estado">Finalizada</span>
+                  <h3 style="margin-top:8px">Optometría</h3>
+                  <p>Dra. Diana Romero</p>
+                  <div class="cita-meta"><span>🕘 10:15 a. m.</span><span>🏥 Sede Prado</span></div>
+                </div>
+                <button class="btn-secundario" onclick="abrirEncuesta()">Calificar</button>
+              </article>
+            </div>
+
+            <form class="tarjeta formulario-card" id="formCita">
+              <span class="etiqueta">Agendamiento</span>
+              <h3>Solicitar nueva cita</h3>
+
+              <div class="campo">
+                <label for="especialidad">Especialidad</label>
+                <select id="especialidad" required>
+                  <option value="">Selecciona una opción</option>
+                  <option>Medicina general</option>
+                  <option>Odontología</option>
+                  <option>Pediatría</option>
+                  <option>Psicología</option>
+                  <option>Optometría</option>
+                </select>
+              </div>
+
+              <div class="campo">
+                <label for="sedeCita">Sede</label>
+                <select id="sedeCita" required>
+                  <option value="">Selecciona una sede</option>
+                  <option>Centro Médico Norte</option>
+                  <option>Sede Centro</option>
+                  <option>Sede Prado</option>
+                </select>
+              </div>
+
+              <div class="fila-campos">
+                <div class="campo">
+                  <label for="fechaCita">Fecha</label>
+                  <input type="date" id="fechaCita" required>
+                </div>
+                <div class="campo">
+                  <label for="horaCita">Hora</label>
+                  <select id="horaCita" required>
+                    <option value="">Hora</option>
+                    <option>8:00 a. m.</option>
+                    <option>9:30 a. m.</option>
+                    <option>11:00 a. m.</option>
+                    <option>2:00 p. m.</option>
+                    <option>3:30 p. m.</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn-primario ancho-completo" type="submit">Confirmar solicitud</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- AUTORIZACIONES -->
+        <section class="pagina" id="pagina-autorizaciones">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Servicios médicos</span>
+              <h1>Autorizaciones</h1>
+              <p>Consulta el estado de tus solicitudes o radica una nueva autorización.</p>
+            </div>
+          </div>
+
+          <div class="estadisticas">
+            <div class="estadistica"><div class="estadistica-icono">📄</div><div><strong id="statTotalAut">3</strong><span>Solicitudes totales</span></div></div>
+            <div class="estadistica"><div class="estadistica-icono verde">✓</div><div><strong id="statAutorizadas">2</strong><span>Autorizadas</span></div></div>
+            <div class="estadistica"><div class="estadistica-icono naranja">⏳</div><div><strong id="statRevision">1</strong><span>En revisión</span></div></div>
+          </div>
+
+          <div class="dos-columnas">
+            <div class="lista-vertical" id="listaAutorizaciones">
+              <article class="tramite-card">
+                <div class="tramite-card-top">
+                  <div class="tramite-info">
+                    <span class="estado amarillo">En revisión</span>
+                    <h3 style="margin-top:9px">Ecografía abdominal total</h3>
+                    <p>Radicado AUT-2026-01834 · Solicitado el 25 de julio de 2026</p>
+                  </div>
+                  <div style="font-size:29px">🩻</div>
+                </div>
+                <div class="barra-progreso"><span style="width:50%"></span></div>
+                <div class="pasos">
+                  <div class="paso hecho">✓ Solicitud enviada</div>
+                  <div class="paso hecho">⏳ En revisión</div>
+                  <div class="paso">Autorizada</div>
+                  <div class="paso">Cita programada</div>
+                </div>
+              </article>
+
+              <article class="tramite-card">
+                <div class="tramite-card-top">
+                  <div class="tramite-info">
+                    <span class="estado verde">Autorizada</span>
+                    <h3 style="margin-top:9px">Consulta de cardiología</h3>
+                    <p>Radicado AUT-2026-01627 · Vigente hasta el 30 de agosto de 2026</p>
+                  </div>
+                  <div style="font-size:29px">❤️</div>
+                </div>
+                <div class="barra-progreso"><span style="width:75%"></span></div>
+                <div class="pasos">
+                  <div class="paso hecho">✓ Solicitud enviada</div>
+                  <div class="paso hecho">✓ En revisión</div>
+                  <div class="paso hecho">✓ Autorizada</div>
+                  <div class="paso">Cita programada</div>
+                </div>
+              </article>
+            </div>
+
+            <form class="tarjeta formulario-card" id="formAutorizacion">
+              <span class="etiqueta">Nueva solicitud</span>
+              <h3>Radicar autorización</h3>
+
+              <div class="campo">
+                <label for="tipoServicio">Tipo de servicio</label>
+                <select id="tipoServicio" required>
+                  <option value="">Selecciona una opción</option>
+                  <option>Consulta especializada</option>
+                  <option>Examen diagnóstico</option>
+                  <option>Procedimiento médico</option>
+                  <option>Medicamento no POS</option>
+                </select>
+              </div>
+
+              <div class="campo">
+                <label for="ordenMedica">Número de orden médica</label>
+                <input id="ordenMedica" placeholder="Ej. OM-458236" required>
+              </div>
+
+              <div class="campo">
+                <label for="archivoOrden">Adjuntar orden</label>
+                <input id="archivoOrden" type="file" accept=".pdf,.jpg,.jpeg,.png">
+              </div>
+
+              <div class="campo">
+                <label for="observacionesAut">Observaciones</label>
+                <textarea id="observacionesAut" placeholder="Escribe información adicional"></textarea>
+              </div>
+
+              <button class="btn-primario ancho-completo" type="submit">Enviar solicitud</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- MEDICAMENTOS -->
+        <section class="pagina" id="pagina-medicamentos">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Tratamientos</span>
+              <h1>Mis medicamentos</h1>
+              <p>Consulta tus fórmulas activas y organiza tus recordatorios.</p>
+            </div>
+            <button class="btn-primario" id="btnSolicitarRenovacion">Solicitar renovación</button>
+          </div>
+
+          <div class="grid-medicamentos">
+            <article class="medicamento-card">
+              <div class="medicamento-top">
+                <div class="medicamento-icono">💊</div>
+                <span class="estado verde">Activo</span>
+              </div>
+              <h3 style="margin-top:15px">Losartán 50 mg</h3>
+              <p>Tratamiento para control de presión arterial.</p>
+              <div class="medicamento-datos">
+                <div class="medicamento-dato"><span>Dosis</span><b>1 tableta</b></div>
+                <div class="medicamento-dato"><span>Frecuencia</span><b>Cada 24 horas</b></div>
+                <div class="medicamento-dato"><span>Próxima toma</span><b>Hoy · 8:00 p. m.</b></div>
+              </div>
+              <button class="btn-secundario ancho-completo" data-recordatorio-medicamento="Losartán 50 mg">🔔 Activar recordatorio</button>
+            </article>
+
+            <article class="medicamento-card">
+              <div class="medicamento-top">
+                <div class="medicamento-icono" style="color:var(--verde);background:var(--verde-claro)">💊</div>
+                <span class="estado verde">Activo</span>
+              </div>
+              <h3 style="margin-top:15px">Omeprazol 20 mg</h3>
+              <p>Tomar antes del desayuno durante 30 días.</p>
+              <div class="medicamento-datos">
+                <div class="medicamento-dato"><span>Dosis</span><b>1 cápsula</b></div>
+                <div class="medicamento-dato"><span>Frecuencia</span><b>Cada 24 horas</b></div>
+                <div class="medicamento-dato"><span>Próxima toma</span><b>Mañana · 7:00 a. m.</b></div>
+              </div>
+              <button class="btn-secundario ancho-completo" data-recordatorio-medicamento="Omeprazol 20 mg">🔔 Activar recordatorio</button>
+            </article>
+
+            <article class="medicamento-card">
+              <div class="medicamento-top">
+                <div class="medicamento-icono" style="color:var(--morado);background:#f0ecff">🧴</div>
+                <span class="estado">Finaliza pronto</span>
+              </div>
+              <h3 style="margin-top:15px">Diclofenaco gel</h3>
+              <p>Aplicar en la zona afectada según indicación médica.</p>
+              <div class="medicamento-datos">
+                <div class="medicamento-dato"><span>Dosis</span><b>Capa delgada</b></div>
+                <div class="medicamento-dato"><span>Frecuencia</span><b>Cada 12 horas</b></div>
+                <div class="medicamento-dato"><span>Vigencia</span><b>3 días</b></div>
+              </div>
+              <button class="btn-secundario ancho-completo" data-tratamiento="Diclofenaco gel">Ver tratamiento</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- CENTROS -->
+        <section class="pagina" id="pagina-centros">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Red de atención</span>
+              <h1>Centros médicos</h1>
+              <p>Encuentra sedes, horarios, servicios y datos de contacto.</p>
+            </div>
+            <div class="campo" style="margin:0;min-width:min(330px,100%)">
+              <input id="buscarCentro" placeholder="🔎 Buscar sede o servicio">
+            </div>
+          </div>
+
+          <div class="grid-centros" id="listaCentros">
+            <article class="centro-card" data-busqueda="centro médico norte medicina general laboratorio vacunación">
+              <div class="centro-imagen">🏥</div>
+              <div class="centro-cuerpo">
+                <div class="centro-top"><h3>Centro Médico Norte</h3><span class="estado verde">Abierto</span></div>
+                <p>Medicina general, laboratorio y vacunación.</p>
+                <div class="cita-meta">
+                  <span>📍 Calle 72 # 43-25</span>
+                  <span>🕘 Lunes a sábado · 6:00 a. m. a 8:00 p. m.</span>
+                  <span>📞 (605) 385 2200</span>
+                </div>
+                <button class="btn-primario ancho-completo" data-map="Centro Médico Norte, Calle 72 43-25, Barranquilla">Cómo llegar</button>
+              </div>
+            </article>
+
+            <article class="centro-card" data-busqueda="sede centro odontología medicina general farmacia">
+              <div class="centro-imagen" style="background:linear-gradient(rgba(5,57,104,.38),rgba(5,57,104,.45)),linear-gradient(135deg,#7657d6,#388bd0)">🏨</div>
+              <div class="centro-cuerpo">
+                <div class="centro-top"><h3>Sede Centro</h3><span class="estado verde">Abierto</span></div>
+                <p>Odontología, medicina general y farmacia.</p>
+                <div class="cita-meta">
+                  <span>📍 Carrera 45 # 38-20</span>
+                  <span>🕘 Lunes a viernes · 7:00 a. m. a 7:00 p. m.</span>
+                  <span>📞 (605) 385 2201</span>
+                </div>
+                <button class="btn-primario ancho-completo" data-map="Carrera 45 38-20, Barranquilla">Cómo llegar</button>
+              </div>
+            </article>
+
+            <article class="centro-card" data-busqueda="sede prado especialistas imágenes diagnósticas urgencias">
+              <div class="centro-imagen" style="background:linear-gradient(rgba(5,57,104,.38),rgba(5,57,104,.45)),linear-gradient(135deg,#20b486,#0b5cad)">🏩</div>
+              <div class="centro-cuerpo">
+                <div class="centro-top"><h3>Sede Prado</h3><span class="estado amarillo">Alta demanda</span></div>
+                <p>Especialistas, imágenes diagnósticas y urgencias.</p>
+                <div class="cita-meta">
+                  <span>📍 Carrera 53 # 76-18</span>
+                  <span>🕘 Atención 24 horas</span>
+                  <span>📞 (605) 385 2202</span>
+                </div>
+                <button class="btn-primario ancho-completo" data-map="Carrera 53 76-18, Barranquilla">Cómo llegar</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- TRÁMITES -->
+        <section class="pagina" id="pagina-tramites">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Seguimiento</span>
+              <h1>Mis trámites</h1>
+              <p>Revisa el avance de tus solicitudes de manera clara y visual.</p>
+            </div>
+          </div>
+
+          <div class="lista-vertical">
+            <article class="tramite-card">
+              <div class="tramite-card-top">
+                <div class="tramite-info">
+                  <span class="estado amarillo">En revisión</span>
+                  <h3 style="margin-top:9px">Autorización de ecografía abdominal</h3>
+                  <p>Radicado AUT-2026-01834 · Última actualización: hoy, 10:45 a. m.</p>
+                </div>
+                <button class="btn-secundario" type="button" data-tramite-detalle="La solicitud está siendo validada por auditoría médica. Tiempo estimado de respuesta: 2 días hábiles.">Ver detalle</button>
+              </div>
+              <div class="barra-progreso"><span style="width:50%"></span></div>
+              <div class="pasos">
+                <div class="paso hecho">✅ Solicitud enviada</div>
+                <div class="paso hecho">⏳ En revisión</div>
+                <div class="paso">✔️ Autorizada</div>
+                <div class="paso">📅 Cita programada</div>
+              </div>
+            </article>
+
+            <article class="tramite-card">
+              <div class="tramite-card-top">
+                <div class="tramite-info">
+                  <span class="estado verde">Autorizada</span>
+                  <h3 style="margin-top:9px">Consulta de cardiología</h3>
+                  <p>Radicado AUT-2026-01627 · Autorizada el 22 de julio de 2026</p>
+                </div>
+                <button class="btn-secundario" data-pagina="citas">Programar cita</button>
+              </div>
+              <div class="barra-progreso"><span style="width:75%"></span></div>
+              <div class="pasos">
+                <div class="paso hecho">✅ Solicitud enviada</div>
+                <div class="paso hecho">✅ En revisión</div>
+                <div class="paso hecho">✔️ Autorizada</div>
+                <div class="paso">📅 Cita programada</div>
+              </div>
+            </article>
+
+            <article class="tramite-card">
+              <div class="tramite-card-top">
+                <div class="tramite-info">
+                  <span class="estado verde">Finalizado</span>
+                  <h3 style="margin-top:9px">Actualización de datos personales</h3>
+                  <p>Radicado DAT-2026-00891 · Finalizado el 18 de julio de 2026</p>
+                </div>
+                <button class="btn-secundario" onclick="abrirEncuesta()">Calificar atención</button>
+              </div>
+              <div class="barra-progreso"><span style="width:100%"></span></div>
+              <div class="pasos">
+                <div class="paso hecho">✅ Solicitud enviada</div>
+                <div class="paso hecho">✅ Validación</div>
+                <div class="paso hecho">✅ Actualización</div>
+                <div class="paso hecho">✅ Finalizado</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- PERFIL -->
+        <section class="pagina" id="pagina-perfil">
+          <div class="cabecera-pagina">
+            <div>
+              <span class="etiqueta">Información personal</span>
+              <h1>Mi perfil</h1>
+              <p>Consulta tus datos de afiliación y preferencias de contacto.</p>
+            </div>
+          </div>
+
+          <div class="perfil-grid">
+            <article class="tarjeta perfil-principal">
+              <div class="avatar-grande" id="avatarGrande">O</div>
+              <h2 id="nombrePerfilVista">Olivia</h2>
+              <p>Afiliada activa · Régimen contributivo</p>
+              <span class="estado verde" style="margin-top:12px">Afiliación vigente</span>
+
+              <div class="datos-perfil">
+                <div class="dato-perfil"><small>Documento</small><strong>CC 1.234.567.890</strong></div>
+                <div class="dato-perfil"><small>IPS primaria</small><strong>Centro Médico Norte</strong></div>
+                <div class="dato-perfil"><small>Tipo de afiliado</small><strong>Cotizante</strong></div>
+              </div>
+            </article>
+
+            <form class="tarjeta formulario-card" id="formPerfil" style="position:static">
+              <span class="etiqueta">Datos de contacto</span>
+              <h3>Actualizar información</h3>
+
+              <div class="fila-campos">
+                <div class="campo"><label for="perfilNombre">Nombre</label><input id="perfilNombre" value="Olivia" required></div>
+                <div class="campo"><label for="perfilApellido">Apellido</label><input id="perfilApellido" value="" placeholder="Apellido (opcional)"></div>
+              </div>
+
+              <div class="campo"><label for="perfilCorreo">Correo electrónico</label><input id="perfilCorreo" type="email" value="olivia@email.com" required></div>
+              <div class="campo"><label for="perfilTelefono">Teléfono</label><input id="perfilTelefono" value="300 000 0000" required></div>
+              <div class="campo"><label for="perfilDireccion">Dirección</label><input id="perfilDireccion" value="Soledad, Atlántico"></div>
+              <div class="campo">
+                <label for="perfilCanal">Canal de notificación preferido</label>
+                <select id="perfilCanal"><option>WhatsApp</option><option>Correo electrónico</option><option>Mensaje de texto</option></select>
+              </div>
+              <button class="btn-primario ancho-completo" type="submit">Guardar cambios</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- NAVEGACIÓN MÓVIL -->
+  <nav class="nav-movil">
+    <button class="activo" data-pagina="inicio">🏠<span>Inicio</span></button>
+    <button data-pagina="citas">📅<span>Citas</span></button>
+    <button data-pagina="tramites">📋<span>Trámites</span></button>
+    <button data-pagina="perfil">👤<span>Perfil</span></button>
+  </nav>
+
+  <!-- PANEL DE ACCESIBILIDAD -->
+  <div class="panel-accesibilidad" id="panelAccesibilidad">
+    <h3>♿ Accesibilidad</h3>
+
+    <div class="opcion-accesibilidad">
+      <div><strong>Tamaño del texto</strong><br><small style="color:var(--texto-suave)">Aumenta o reduce la letra</small></div>
+      <div class="controles-fuente">
+        <button id="reducirFuente">A−</button>
+        <button id="restablecerFuente">A</button>
+        <button id="aumentarFuente">A+</button>
+      </div>
+    </div>
+
+    <div class="opcion-accesibilidad">
+      <div><strong>Alto contraste</strong><br><small style="color:var(--texto-suave)">Mejora la visibilidad</small></div>
+      <label class="switch">
+        <input type="checkbox" id="contraste">
+        <span></span>
+      </label>
+    </div>
+
+    <div class="opcion-accesibilidad">
+      <div><strong>Lectura en voz alta</strong><br><small style="color:var(--texto-suave)">Lee el contenido visible</small></div>
+      <button class="btn-secundario" id="leerDesdePanel">Leer</button>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-flotante">
+    <div class="chat-ventana" id="chatVentana">
+      <div class="chat-cabecera">
+        <div class="avatar">AS</div>
+        <div><strong>Asistente Mi EPS</strong><br><small>En línea · Respuesta rápida</small></div>
+        <button class="cerrar-chat" onclick="cerrarChat()">✕</button>
+      </div>
+
+      <div class="chat-mensajes" id="chatMensajes">
+        <div class="mensaje asesor">Hola, Olivia 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?</div>
+        <div class="mensaje asesor">Puedes preguntarme por citas, autorizaciones, medicamentos o centros médicos.</div>
+      </div>
+
+      <form class="chat-escritura" id="formChat">
+        <input id="mensajeChat" placeholder="Escribe tu mensaje..." autocomplete="off">
+        <button type="submit">➤</button>
+      </form>
+    </div>
+
+    <button class="chat-boton" onclick="abrirChat()" aria-label="Abrir chat">💬</button>
+  </div>
+
+  <!-- MODAL ENCUESTA -->
+  <div class="modal-fondo" id="modalEncuesta">
+    <div class="modal">
+      <div class="modal-cabecera">
+        <div>
+          <span class="etiqueta">Tu opinión importa</span>
+          <h2>Califica la atención</h2>
+          <p style="margin-top:7px;color:var(--texto-suave)">Ayúdanos a mejorar nuestros servicios.</p>
+        </div>
+        <button class="modal-cerrar" onclick="cerrarEncuesta()">✕</button>
+      </div>
+
+      <div class="estrellas" id="estrellas">
+        <button class="estrella" data-valor="1">★</button>
+        <button class="estrella" data-valor="2">★</button>
+        <button class="estrella" data-valor="3">★</button>
+        <button class="estrella" data-valor="4">★</button>
+        <button class="estrella" data-valor="5">★</button>
+      </div>
+
+      <div class="campo">
+        <label for="comentarioEncuesta">Cuéntanos cómo fue tu experiencia</label>
+        <textarea id="comentarioEncuesta" placeholder="Escribe un comentario opcional"></textarea>
+      </div>
+
+      <button class="btn-primario ancho-completo" onclick="enviarEncuesta()">Enviar calificación</button>
+    </div>
+  </div>
+
+
+
+  <!-- MODAL DE DETALLES -->
+  <div class="modal-fondo" id="modalDetalle">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalDetalle">
+      <div class="modal-cabecera">
+        <div>
+          <span class="etiqueta" id="etiquetaModalDetalle">Información</span>
+          <h2 id="tituloModalDetalle">Detalle</h2>
+        </div>
+        <button class="modal-cerrar" id="cerrarModalDetalle" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-contenido-detalle" id="contenidoModalDetalle"></div>
+      <div class="modal-acciones">
+        <button class="btn-secundario" id="btnModalSecundario" type="button">Cerrar</button>
+        <button class="btn-primario" id="btnModalPrincipal" type="button">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE NOTIFICACIONES -->
+  <div class="modal-fondo" id="modalNotificaciones">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloNotificaciones">
+      <div class="modal-cabecera">
+        <div>
+          <span class="etiqueta">Centro de avisos</span>
+          <h2 id="tituloNotificaciones">Notificaciones</h2>
+        </div>
+        <button class="modal-cerrar" id="cerrarNotificaciones" aria-label="Cerrar">✕</button>
+      </div>
+      <div id="listaNotificaciones">
+        <div class="notificacion-item"><span>📅</span><div><strong>Cita confirmada</strong><small>Medicina general · 28 de julio, 9:30 a. m.</small></div></div>
+        <div class="notificacion-item"><span>📄</span><div><strong>Autorización en revisión</strong><small>Ecografía abdominal · Radicado AUT-2026-01834.</small></div></div>
+        <div class="notificacion-item"><span>💊</span><div><strong>Próxima toma</strong><small>Losartán 50 mg · Hoy a las 8:00 p. m.</small></div></div>
+      </div>
+      <div class="modal-acciones">
+        <button class="btn-secundario" id="marcarNotificacionesLeidas" type="button">Marcar como leídas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN -->
+  <div class="notificacion" id="notificacion">
+    <span style="font-size:21px">✓</span>
+    <span id="textoNotificacion">Acción realizada correctamente.</span>
+  </div>
+
+  <script>
+    const CLAVES = {
+      perfil: 'miEPS_perfil_v2',
+      citas: 'miEPS_citas_v2',
+      autorizaciones: 'miEPS_autorizaciones_v2',
+      recordatorios: 'miEPS_recordatorios_v2',
+      encuesta: 'miEPS_encuesta_v2',
+      notificacionesLeidas: 'miEPS_notificaciones_leidas_v2'
+    };
+
+    const leerLocal = clave => {
+      try { return localStorage.getItem(clave); } catch (error) { return null; }
+    };
+    const guardarLocal = (clave, valor) => {
+      try { localStorage.setItem(clave, String(valor)); return true; } catch (error) { return false; }
+    };
+
+    const obtenerJSON = (clave, respaldo) => {
+      try {
+        const valor = leerLocal(clave);
+        return valor ? JSON.parse(valor) : respaldo;
+      } catch (error) {
+        return respaldo;
+      }
+    };
+
+    const guardarJSON = (clave, valor) => guardarLocal(clave, JSON.stringify(valor));
+    const escaparHTML = (valor = '') => String(valor).replace(/[&<>'"]/g, caracter => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[caracter]);
+
+    const estado = {
+      perfil: obtenerJSON(CLAVES.perfil, {
+        nombre: 'Olivia', apellido: '', correo: 'olivia@email.com', telefono: '300 000 0000',
+        direccion: 'Soledad, Atlántico', canal: 'WhatsApp'
+      }),
+      citas: obtenerJSON(CLAVES.citas, []),
+      autorizaciones: obtenerJSON(CLAVES.autorizaciones, []),
+      recordatorios: obtenerJSON(CLAVES.recordatorios, {}),
+      citaSeleccionada: null,
+      accionModal: null
+    };
+
+    const paginas = document.querySelectorAll('.pagina');
+    const botonesPagina = document.querySelectorAll('[data-pagina]');
+    const menuBotones = document.querySelectorAll('.menu-btn');
+    const navMovilBotones = document.querySelectorAll('.nav-movil button');
+    const sidebar = document.getElementById('sidebar');
+    const overlaySidebar = document.getElementById('overlaySidebar');
+    const tituloBarra = document.getElementById('tituloBarra');
+    const modalDetalle = document.getElementById('modalDetalle');
+    const modalNotificaciones = document.getElementById('modalNotificaciones');
+
+    const titulos = {
+      inicio: 'Portal de servicios al afiliado', citas: 'Citas médicas', autorizaciones: 'Autorizaciones',
+      medicamentos: 'Medicamentos', centros: 'Centros médicos', tramites: 'Mis trámites', perfil: 'Mi perfil'
+    };
+
+    function mostrarPagina(nombre, actualizarHash = true) {
+      if (!titulos[nombre]) nombre = 'inicio';
+      paginas.forEach(pagina => pagina.classList.remove('activa'));
+      document.getElementById(`pagina-${nombre}`)?.classList.add('activa');
+      menuBotones.forEach(btn => btn.classList.toggle('activo', btn.dataset.pagina === nombre));
+      navMovilBotones.forEach(btn => btn.classList.toggle('activo', btn.dataset.pagina === nombre));
+      tituloBarra.textContent = titulos[nombre];
+      if (actualizarHash && location.hash !== `#${nombre}`) history.pushState(null, '', `#${nombre}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      cerrarSidebar();
+    }
+
+    botonesPagina.forEach(boton => boton.addEventListener('click', () => mostrarPagina(boton.dataset.pagina)));
+    window.addEventListener('hashchange', () => mostrarPagina(location.hash.slice(1) || 'inicio', false));
+
+    document.getElementById('btnMenuMovil').addEventListener('click', () => {
+      sidebar.classList.add('abierta');
+      overlaySidebar.classList.add('visible');
+    });
+    overlaySidebar.addEventListener('click', cerrarSidebar);
+    function cerrarSidebar() {
+      sidebar.classList.remove('abierta');
+      overlaySidebar.classList.remove('visible');
+    }
+
+    // PERFIL
+    function nombreCompleto() {
+      return [estado.perfil.nombre, estado.perfil.apellido].filter(Boolean).join(' ') || 'Olivia';
+    }
+
+    function aplicarPerfil() {
+      const nombre = nombreCompleto();
+      const iniciales = [estado.perfil.nombre, estado.perfil.apellido]
+        .filter(Boolean).map(p => p[0]).join('').slice(0, 2).toUpperCase() || 'O';
+      document.getElementById('nombreMini').textContent = nombre;
+      document.getElementById('nombreHero').textContent = estado.perfil.nombre || 'Olivia';
+      document.getElementById('nombrePerfilVista').textContent = nombre;
+      document.getElementById('avatarMini').textContent = iniciales;
+      document.getElementById('avatarGrande').textContent = iniciales;
+      document.getElementById('perfilNombre').value = estado.perfil.nombre;
+      document.getElementById('perfilApellido').value = estado.perfil.apellido;
+      document.getElementById('perfilCorreo').value = estado.perfil.correo;
+      document.getElementById('perfilTelefono').value = estado.perfil.telefono;
+      document.getElementById('perfilDireccion').value = estado.perfil.direccion;
+      document.getElementById('perfilCanal').value = estado.perfil.canal;
+      document.querySelectorAll('.chat-mensajes .mensaje.asesor').forEach((mensaje, indice) => {
+        if (indice === 0) mensaje.textContent = `Hola, ${estado.perfil.nombre} 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?`;
+      });
+    }
+
+    document.getElementById('formPerfil').addEventListener('submit', function(evento) {
+      evento.preventDefault();
+      estado.perfil = {
+        nombre: document.getElementById('perfilNombre').value.trim() || 'Olivia',
+        apellido: document.getElementById('perfilApellido').value.trim(),
+        correo: document.getElementById('perfilCorreo').value.trim(),
+        telefono: document.getElementById('perfilTelefono').value.trim(),
+        direccion: document.getElementById('perfilDireccion').value.trim(),
+        canal: document.getElementById('perfilCanal').value
+      };
+      guardarJSON(CLAVES.perfil, estado.perfil);
+      aplicarPerfil();
+      mostrarNotificacion('Tus datos fueron actualizados y guardados en este dispositivo.');
+    });
+
+    // CITAS
+    function formatearFecha(fecha) {
+      const objeto = new Date(`${fecha}T12:00:00`);
+      return {
+        dia: String(objeto.getDate()).padStart(2, '0'),
+        mes: objeto.toLocaleDateString('es-CO', { month: 'short' }).toUpperCase().replace('.', ''),
+        anio: objeto.getFullYear(),
+        larga: objeto.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })
+      };
+    }
+
+    function crearTarjetaCita(cita) {
+      const fecha = formatearFecha(cita.fecha);
+      const tarjeta = document.createElement('article');
+      tarjeta.className = 'cita-card';
+      tarjeta.dataset.citaId = cita.id;
+      tarjeta.innerHTML = `
+        <div class="fecha-cita"><strong>${fecha.dia}</strong><span>${fecha.mes} · ${fecha.anio}</span></div>
+        <div class="cita-info">
+          <span class="estado amarillo">Solicitada</span>
+          <h3 style="margin-top:8px">${escaparHTML(cita.especialidad)}</h3>
+          <p>Profesional por asignar</p>
+          <div class="cita-meta"><span>🕘 ${escaparHTML(cita.hora)}</span><span>🏥 ${escaparHTML(cita.sede)}</span></div>
+        </div>
+        <button class="btn-secundario btn-detalle-cita" type="button">Detalles</button>`;
+      return tarjeta;
+    }
+
+    function renderCitasGuardadas() {
+      const lista = document.getElementById('listaCitas');
+      lista.querySelectorAll('[data-cita-id]').forEach(item => item.remove());
+      [...estado.citas].reverse().forEach(cita => lista.prepend(crearTarjetaCita(cita)));
+    }
+
+    document.getElementById('formCita').addEventListener('submit', function(evento) {
+      evento.preventDefault();
+      const cita = {
+        id: `CITA-${Date.now()}`,
+        especialidad: document.getElementById('especialidad').value,
+        sede: document.getElementById('sedeCita').value,
+        fecha: document.getElementById('fechaCita').value,
+        hora: document.getElementById('horaCita').value,
+        estado: 'Solicitada'
+      };
+      estado.citas.push(cita);
+      guardarJSON(CLAVES.citas, estado.citas);
+      renderCitasGuardadas();
+      this.reset();
+      mostrarNotificacion('Tu solicitud de cita fue registrada correctamente.');
+    });
+
+    document.getElementById('listaCitas').addEventListener('click', evento => {
+      const boton = evento.target.closest('button');
+      if (!boton || boton.textContent.trim() === 'Calificar') return;
+      const tarjeta = boton.closest('.cita-card');
+      if (!tarjeta) return;
+      const id = tarjeta.dataset.citaId || `ESTATICA-${[...tarjeta.parentElement.children].indexOf(tarjeta)}`;
+      const citaGuardada = estado.citas.find(c => c.id === id);
+      const titulo = tarjeta.querySelector('h3')?.textContent || 'Cita médica';
+      const profesional = tarjeta.querySelector('p')?.textContent || 'Profesional por asignar';
+      const meta = [...tarjeta.querySelectorAll('.cita-meta span')].map(x => x.textContent);
+      estado.citaSeleccionada = { id, tarjeta, guardada: Boolean(citaGuardada) };
+      abrirModalDetalle({
+        etiqueta: 'Agenda médica',
+        titulo,
+        html: `<div class="detalle-fila"><span>Profesional</span><b>${escaparHTML(profesional)}</b></div>
+               <div class="detalle-fila"><span>Horario</span><b>${escaparHTML(meta[0] || '')}</b></div>
+               <div class="detalle-fila"><span>Sede</span><b>${escaparHTML(meta[1] || '')}</b></div>`,
+        textoPrincipal: 'Cancelar cita',
+        clasePrincipal: 'btn-peligro',
+        accion: cancelarCitaSeleccionada
+      });
+    });
+
+    function cancelarCitaSeleccionada() {
+      const seleccion = estado.citaSeleccionada;
+      if (!seleccion) return;
+      if (seleccion.guardada) {
+        estado.citas = estado.citas.filter(cita => cita.id !== seleccion.id);
+        guardarJSON(CLAVES.citas, estado.citas);
+        seleccion.tarjeta.remove();
+      } else {
+        const estadoVisual = seleccion.tarjeta.querySelector('.estado');
+        estadoVisual.textContent = 'Cancelada';
+        estadoVisual.className = 'estado cancelada';
+        seleccion.tarjeta.classList.add('completado');
+        seleccion.tarjeta.querySelector('button').disabled = true;
+      }
+      cerrarModalDetalle();
+      mostrarNotificacion('La cita fue cancelada correctamente.');
+    }
+
+    // AUTORIZACIONES
+    function crearTarjetaAutorizacion(item) {
+      const tarjeta = document.createElement('article');
+      tarjeta.className = 'tramite-card';
+      tarjeta.dataset.autorizacionId = item.id;
+      tarjeta.innerHTML = `
+        <div class="tramite-card-top"><div class="tramite-info">
+          <span class="estado amarillo">En revisión</span>
+          <h3 style="margin-top:9px">${escaparHTML(item.tipo)}</h3>
+          <p>Radicado ${escaparHTML(item.id)} · Orden ${escaparHTML(item.orden)} · ${escaparHTML(item.archivo || 'Sin archivo adjunto')}</p>
+        </div><div style="font-size:29px">📑</div></div>
+        <div class="barra-progreso"><span style="width:50%"></span></div>
+        <div class="pasos"><div class="paso hecho">✓ Solicitud enviada</div><div class="paso hecho">⏳ En revisión</div><div class="paso">Autorizada</div><div class="paso">Cita programada</div></div>`;
+      return tarjeta;
+    }
+
+    function renderAutorizaciones() {
+      const lista = document.getElementById('listaAutorizaciones');
+      lista.querySelectorAll('[data-autorizacion-id]').forEach(item => item.remove());
+      [...estado.autorizaciones].reverse().forEach(item => lista.prepend(crearTarjetaAutorizacion(item)));
+      document.getElementById('statTotalAut').textContent = 3 + estado.autorizaciones.length;
+      document.getElementById('statAutorizadas').textContent = 2;
+      document.getElementById('statRevision').textContent = 1 + estado.autorizaciones.length;
+    }
+
+    document.getElementById('formAutorizacion').addEventListener('submit', function(evento) {
+      evento.preventDefault();
+      const consecutivo = String(1902 + estado.autorizaciones.length).padStart(5, '0');
+      const archivo = document.getElementById('archivoOrden').files[0];
+      const item = {
+        id: `AUT-2026-${consecutivo}`,
+        tipo: document.getElementById('tipoServicio').value,
+        orden: document.getElementById('ordenMedica').value.trim(),
+        archivo: archivo ? archivo.name : '',
+        observaciones: document.getElementById('observacionesAut').value.trim()
+      };
+      estado.autorizaciones.push(item);
+      guardarJSON(CLAVES.autorizaciones, estado.autorizaciones);
+      renderAutorizaciones();
+      this.reset();
+      mostrarNotificacion(`La autorización fue radicada con el número ${item.id}.`);
+    });
+
+    // MEDICAMENTOS Y RECORDATORIOS
+    document.querySelectorAll('[data-recordatorio-medicamento]').forEach(boton => {
+      const medicamento = boton.dataset.recordatorioMedicamento;
+      const activo = Boolean(estado.recordatorios[medicamento]);
+      actualizarBotonRecordatorio(boton, activo);
+      boton.addEventListener('click', () => {
+        estado.recordatorios[medicamento] = !estado.recordatorios[medicamento];
+        guardarJSON(CLAVES.recordatorios, estado.recordatorios);
+        actualizarBotonRecordatorio(boton, estado.recordatorios[medicamento]);
+        mostrarNotificacion(estado.recordatorios[medicamento] ? `Recordatorio activado para ${medicamento}.` : `Recordatorio desactivado para ${medicamento}.`);
+      });
+    });
+
+    function actualizarBotonRecordatorio(boton, activo) {
+      boton.textContent = activo ? '✓ Recordatorio activo' : '🔔 Activar recordatorio';
+      boton.classList.toggle('btn-primario', activo);
+      boton.classList.toggle('btn-secundario', !activo);
+    }
+
+    document.querySelector('[data-tratamiento]')?.addEventListener('click', evento => {
+      abrirModalDetalle({
+        etiqueta: 'Tratamiento', titulo: evento.currentTarget.dataset.tratamiento,
+        html: '<div class="detalle-fila"><span>Aplicación</span><b>Capa delgada cada 12 horas</b></div><div class="detalle-fila"><span>Vigencia restante</span><b>3 días</b></div>',
+        textoPrincipal: 'Entendido', accion: cerrarModalDetalle
+      });
+    });
+
+    document.getElementById('btnSolicitarRenovacion').addEventListener('click', () => {
+      abrirModalDetalle({
+        etiqueta: 'Fórmula médica', titulo: 'Solicitar renovación',
+        html: '<p>La solicitud será enviada a revisión médica para los tratamientos activos. Recibirás la respuesta por tu canal de contacto preferido.</p>',
+        textoPrincipal: 'Enviar solicitud', accion: () => {
+          cerrarModalDetalle();
+          mostrarNotificacion('La renovación fue enviada para revisión médica.');
+        }
+      });
+    });
+
+    document.getElementById('btnMarcarMedicamento').addEventListener('click', evento => {
+      const tarjeta = evento.currentTarget.closest('.recordatorio');
+      tarjeta.classList.toggle('completado');
+      evento.currentTarget.textContent = tarjeta.classList.contains('completado') ? 'Completado ✓' : 'Marcar';
+      mostrarNotificacion(tarjeta.classList.contains('completado') ? 'Toma marcada como completada.' : 'La toma volvió a quedar pendiente.');
+    });
+
+    document.getElementById('btnAgregarRecordatorio').addEventListener('click', evento => {
+      const activo = evento.currentTarget.dataset.activo === 'true';
+      evento.currentTarget.dataset.activo = String(!activo);
+      evento.currentTarget.textContent = activo ? 'Agregar recordatorio' : 'Recordatorio agregado ✓';
+      mostrarNotificacion(activo ? 'El recordatorio fue retirado.' : 'La cita fue agregada a tus recordatorios.');
+    });
+
+    document.querySelectorAll('[data-tramite-detalle]').forEach(boton => boton.addEventListener('click', () => {
+      abrirModalDetalle({
+        etiqueta: 'Seguimiento de trámite',
+        titulo: 'Estado de la solicitud',
+        html: `<p>${escaparHTML(boton.dataset.tramiteDetalle)}</p><div class="detalle-fila"><span>Estado actual</span><b>En revisión</b></div>`,
+        textoPrincipal: 'Entendido',
+        accion: cerrarModalDetalle
+      });
+    }));
+
+    // CENTROS MÉDICOS
+    const buscadorCentro = document.getElementById('buscarCentro');
+    buscadorCentro.addEventListener('input', function() {
+      const texto = this.value.toLowerCase().trim();
+      let visibles = 0;
+      document.querySelectorAll('#listaCentros .centro-card').forEach(card => {
+        const visible = card.dataset.busqueda.includes(texto);
+        card.style.display = visible ? '' : 'none';
+        if (visible) visibles += 1;
+      });
+      let vacio = document.getElementById('sinResultadosCentros');
+      if (!visibles && texto) {
+        if (!vacio) {
+          vacio = document.createElement('div');
+          vacio.id = 'sinResultadosCentros';
+          vacio.className = 'sin-resultados';
+          document.getElementById('listaCentros').appendChild(vacio);
+        }
+        vacio.textContent = `No encontramos centros para “${texto}”.`;
+      } else vacio?.remove();
+    });
+
+    document.querySelectorAll('[data-map]').forEach(boton => boton.addEventListener('click', () => {
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(boton.dataset.map)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }));
+
+    // ACCESIBILIDAD
+    const panelAccesibilidad = document.getElementById('panelAccesibilidad');
+    let escalaFuente = Number(leerLocal('escalaFuente')) || 16;
+    function aplicarFuente() {
+      document.documentElement.style.setProperty('--tamano-fuente', `${escalaFuente}px`);
+      guardarLocal('escalaFuente', escalaFuente);
+    }
+    aplicarFuente();
+    document.getElementById('btnAccesibilidad').addEventListener('click', () => panelAccesibilidad.classList.toggle('abierto'));
+    document.getElementById('aumentarFuente').addEventListener('click', () => { escalaFuente = Math.min(20, escalaFuente + 1); aplicarFuente(); });
+    document.getElementById('reducirFuente').addEventListener('click', () => { escalaFuente = Math.max(14, escalaFuente - 1); aplicarFuente(); });
+    document.getElementById('restablecerFuente').addEventListener('click', () => { escalaFuente = 16; aplicarFuente(); });
+    const controlContraste = document.getElementById('contraste');
+    controlContraste.checked = leerLocal('contrasteAlto') === 'true';
+    document.body.classList.toggle('contraste-alto', controlContraste.checked);
+    controlContraste.addEventListener('change', () => {
+      document.body.classList.toggle('contraste-alto', controlContraste.checked);
+      guardarLocal('contrasteAlto', controlContraste.checked);
+    });
+
+    function leerPantalla() {
+      if (!('speechSynthesis' in window)) return mostrarNotificacion('Este navegador no permite la lectura en voz alta.');
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        return mostrarNotificacion('La lectura en voz alta se detuvo.');
+      }
+      const paginaActiva = document.querySelector('.pagina.activa');
+      const lectura = new SpeechSynthesisUtterance(paginaActiva.innerText.replace(/\s+/g, ' ').trim());
+      lectura.lang = 'es-CO';
+      lectura.rate = 0.95;
+      window.speechSynthesis.speak(lectura);
+      mostrarNotificacion('La lectura en voz alta ha comenzado. Presiona nuevamente para detenerla.');
+    }
+    document.getElementById('btnLeer').addEventListener('click', leerPantalla);
+    document.getElementById('leerDesdePanel').addEventListener('click', leerPantalla);
+
+    // CHAT
+    const chatVentana = document.getElementById('chatVentana');
+    const chatMensajes = document.getElementById('chatMensajes');
+    function abrirChat() { chatVentana.classList.add('abierta'); setTimeout(() => document.getElementById('mensajeChat').focus(), 100); }
+    function cerrarChat() { chatVentana.classList.remove('abierta'); }
+    function agregarMensaje(texto, tipo) {
+      const mensaje = document.createElement('div');
+      mensaje.className = `mensaje ${tipo}`;
+      mensaje.textContent = texto;
+      chatMensajes.appendChild(mensaje);
+      chatMensajes.scrollTop = chatMensajes.scrollHeight;
+    }
+    document.getElementById('formChat').addEventListener('submit', function(evento) {
+      evento.preventDefault();
+      const input = document.getElementById('mensajeChat');
+      const texto = input.value.trim();
+      if (!texto) return;
+      agregarMensaje(texto, 'usuario');
+      input.value = '';
+      setTimeout(() => {
+        const consulta = texto.toLowerCase();
+        let respuesta = 'Puedo orientarte desde este demo. Usa el menú para gestionar el servicio que necesitas.';
+        if (consulta.includes('cita')) respuesta = 'En “Citas médicas” selecciona especialidad, sede, fecha y hora. La nueva solicitud quedará guardada en este navegador.';
+        else if (consulta.includes('autoriz')) respuesta = 'En “Autorizaciones” puedes radicar una solicitud y adjuntar el nombre de tu archivo médico.';
+        else if (consulta.includes('medic')) respuesta = 'En “Medicamentos” puedes activar o desactivar recordatorios de tus tratamientos.';
+        else if (consulta.includes('centro') || consulta.includes('sede')) respuesta = 'Busca una sede en “Centros médicos” y presiona “Cómo llegar” para abrir Google Maps.';
+        else if (consulta.includes('hola')) respuesta = `¡Hola, ${estado.perfil.nombre}! 😊 ¿Necesitas una cita, autorización o información de medicamentos?`;
+        else if (consulta.includes('gracias')) respuesta = '¡Con gusto! Estoy aquí para ayudarte con los servicios de Mi EPS.';
+        agregarMensaje(respuesta, 'asesor');
+      }, 500);
+    });
+
+    // ENCUESTA
+    let calificacion = 0;
+    function abrirEncuesta() { document.getElementById('modalEncuesta').classList.add('abierto'); }
+    function cerrarEncuesta() { document.getElementById('modalEncuesta').classList.remove('abierto'); }
+    document.querySelectorAll('.estrella').forEach(estrella => estrella.addEventListener('click', () => {
+      calificacion = Number(estrella.dataset.valor);
+      document.querySelectorAll('.estrella').forEach(item => item.classList.toggle('seleccionada', Number(item.dataset.valor) <= calificacion));
+    }));
+    function enviarEncuesta() {
+      if (!calificacion) return mostrarNotificacion('Selecciona una calificación antes de enviar.');
+      guardarJSON(CLAVES.encuesta, { calificacion, comentario: document.getElementById('comentarioEncuesta').value.trim(), fecha: new Date().toISOString() });
+      cerrarEncuesta();
+      document.getElementById('comentarioEncuesta').value = '';
+      document.querySelectorAll('.estrella').forEach(item => item.classList.remove('seleccionada'));
+      calificacion = 0;
+      mostrarNotificacion('Gracias por compartir tu opinión. La calificación quedó guardada.');
+    }
+    document.getElementById('modalEncuesta').addEventListener('click', evento => { if (evento.target === evento.currentTarget) cerrarEncuesta(); });
+
+    // MODALES Y NOTIFICACIONES
+    function abrirModalDetalle({ etiqueta = 'Información', titulo = 'Detalle', html = '', textoPrincipal = 'Aceptar', clasePrincipal = 'btn-primario', accion = cerrarModalDetalle }) {
+      document.getElementById('etiquetaModalDetalle').textContent = etiqueta;
+      document.getElementById('tituloModalDetalle').textContent = titulo;
+      document.getElementById('contenidoModalDetalle').innerHTML = html;
+      const principal = document.getElementById('btnModalPrincipal');
+      principal.textContent = textoPrincipal;
+      principal.className = clasePrincipal;
+      estado.accionModal = accion;
+      modalDetalle.classList.add('abierto');
+    }
+    function cerrarModalDetalle() { modalDetalle.classList.remove('abierto'); estado.accionModal = null; }
+    document.getElementById('cerrarModalDetalle').addEventListener('click', cerrarModalDetalle);
+    document.getElementById('btnModalSecundario').addEventListener('click', cerrarModalDetalle);
+    document.getElementById('btnModalPrincipal').addEventListener('click', () => estado.accionModal?.());
+    modalDetalle.addEventListener('click', evento => { if (evento.target === modalDetalle) cerrarModalDetalle(); });
+
+    const contadorNotificaciones = document.getElementById('contadorNotificaciones');
+    if (leerLocal(CLAVES.notificacionesLeidas) === 'true') contadorNotificaciones.style.display = 'none';
+    document.getElementById('btnNotificaciones').addEventListener('click', () => modalNotificaciones.classList.add('abierto'));
+    document.getElementById('cerrarNotificaciones').addEventListener('click', () => modalNotificaciones.classList.remove('abierto'));
+    document.getElementById('marcarNotificacionesLeidas').addEventListener('click', () => {
+      contadorNotificaciones.style.display = 'none';
+      guardarLocal(CLAVES.notificacionesLeidas, 'true');
+      modalNotificaciones.classList.remove('abierto');
+      mostrarNotificacion('Todas las notificaciones fueron marcadas como leídas.');
+    });
+    modalNotificaciones.addEventListener('click', evento => { if (evento.target === modalNotificaciones) modalNotificaciones.classList.remove('abierto'); });
+
+    let temporizadorNotificacion;
+    function mostrarNotificacion(texto) {
+      const notificacion = document.getElementById('notificacion');
+      document.getElementById('textoNotificacion').textContent = texto;
+      notificacion.classList.add('mostrar');
+      clearTimeout(temporizadorNotificacion);
+      temporizadorNotificacion = setTimeout(() => notificacion.classList.remove('mostrar'), 3500);
+    }
+
+    document.addEventListener('click', evento => {
+      const botonAccesibilidad = document.getElementById('btnAccesibilidad');
+      if (!panelAccesibilidad.contains(evento.target) && !botonAccesibilidad.contains(evento.target)) panelAccesibilidad.classList.remove('abierto');
+    });
+    document.addEventListener('keydown', evento => {
+      if (evento.key !== 'Escape') return;
+      cerrarChat(); cerrarEncuesta(); cerrarModalDetalle();
+      modalNotificaciones.classList.remove('abierto'); panelAccesibilidad.classList.remove('abierto'); cerrarSidebar();
+    });
+
+    // INICIALIZACIÓN
+    const hoy = new Date();
+    document.getElementById('fechaCita').min = hoy.toISOString().split('T')[0];
+    aplicarPerfil();
+    renderCitasGuardadas();
+    renderAutorizaciones();
+    mostrarPagina(location.hash.slice(1) || 'inicio', false);
+
+    // Funciones utilizadas por botones HTML existentes.
+    window.mostrarPagina = mostrarPagina;
+    window.mostrarNotificacion = mostrarNotificacion;
+    window.abrirChat = abrirChat;
+    window.cerrarChat = cerrarChat;
+    window.abrirEncuesta = abrirEncuesta;
+    window.cerrarEncuesta = cerrarEncuesta;
+    window.enviarEncuesta = enviarEncuesta;
+  </script>
+</body>
+</html>
